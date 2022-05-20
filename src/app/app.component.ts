@@ -1,9 +1,21 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  template: `<div>Hello {{value}}</div>`,
+  templateUrl: './app.component.html',
 })
 export class AppComponent {
-  value = 'Elias';
+  name = '';
+
+  constructor(private http: HttpClient) { }
+
+  ngOnInit(): void {
+      this.http.get('/.auth/me')
+        .subscribe((resp: any) => {
+          if (!!resp.clientPrincipal) {
+            this.name = resp.clientPrincipal.userDetails
+          }
+        });
+  }
 }
